@@ -1,11 +1,20 @@
 package com.profiletweets.service.impl;
 
+import com.profiletweets.model.PortfolioUtils;
 import com.profiletweets.model.portfolio.Portfolio;
+import com.profiletweets.model.portfolio.PortfolioOutput;
+import com.profiletweets.model.twitter.Tweet;
 import com.profiletweets.repository.PortfolioRepository;
 import com.profiletweets.service.PortfolioService;
+import com.profiletweets.service.TwitterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class PortfolioServiceImpl implements PortfolioService {
@@ -13,20 +22,29 @@ public class PortfolioServiceImpl implements PortfolioService {
     @Autowired
     private PortfolioRepository portfolioRepository;
 
+    @Autowired
+    private TwitterService twitterService;
+
     @Override
     public ResponseEntity createPortfolio(Portfolio portfolio) {
-        return ResponseEntity.ok().body(portfolioRepository.save(portfolio));
+        Portfolio portfolioSaved = portfolioRepository.save(portfolio);
+        return ResponseEntity.ok().body(callTweetsFromPortfolio(portfolioSaved));
     }
 
     @Override
     public ResponseEntity findAllPortfolios() {
-        return ResponseEntity.ok().body(portfolioRepository.findAll());
+        return ResponseEntity.ok().body(
+                portfolioRepository.findAll().stream()
+                        .map(portfolio -> callTweetsFromPortfolio(portfolio))
+                        .collect(Collectors.toList()));
     }
 
     @Override
     public ResponseEntity findPortfolio(long id) {
         return portfolioRepository.findById(id)
-                .map(portfolio -> ResponseEntity.ok().body(portfolio)).orElse(ResponseEntity.notFound().build());
+                .map(portfolio -> ResponseEntity.ok()
+                        .body(callTweetsFromPortfolio(portfolio)))
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @Override
@@ -38,7 +56,7 @@ public class PortfolioServiceImpl implements PortfolioService {
                     record.setExperience(portfolio.getExperience());
                     record.setTwitterUserName(portfolio.getTwitterUserName());
                     Portfolio updated = portfolioRepository.save(record);
-                    return ResponseEntity.ok().body(updated);
+                    return ResponseEntity.ok().body(callTweetsFromPortfolio(updated));
                 }).orElse(ResponseEntity.notFound().build());
     }
 
@@ -49,5 +67,10 @@ public class PortfolioServiceImpl implements PortfolioService {
                     portfolioRepository.deleteById(id);
                     return ResponseEntity.ok().build();
                 }).orElse(ResponseEntity.notFound().build());
+    }
+
+    private PortfolioOutput callTweetsFromPortfolio(Portfolio portfolio){
+        Optional<List<Tweet>> tweetsList = twitterService.getTweetsByUserName(portfolio.getTwitterUserName());
+        return PortfolioUtils.portfolioToPortfolioOutput(portfolio, tweetsList.orElse(Arrays.asList(Tweet.builder().build())));
     }
 }

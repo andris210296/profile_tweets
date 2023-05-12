@@ -2,12 +2,16 @@ package com.profiletweets.model.portfolio;
 
 import lombok.*;
 import jakarta.persistence.*;
+import lombok.experimental.SuperBuilder;
+import lombok.extern.jackson.Jacksonized;
+
 import java.io.Serializable;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-@Builder
+@Jacksonized
+@SuperBuilder
 @Entity(name = "portfolio")
 public class Portfolio implements Serializable {
 
