@@ -9,5 +9,5 @@ import java.util.Optional;
 @Repository
 public interface PortfolioRepository extends JpaRepository<Portfolio, Long> {
     @Override
-    Optional<Portfolio> findById(Long integer);
+    Optional<Portfolio> findById(Long id);
 }
