@@ -12,7 +12,7 @@ public class PortfolioUtils {
         return PortfolioOutput.builder()
                 .idPortfolio(portfolio.getIdPortfolio())
                 .imagePath(portfolio.getImagePath())
-                .name(portfolio.getImagePath())
+                .name(portfolio.getName())
                 .experience(portfolio.getExperience())
                 .twitterUserName(portfolio.getTwitterUserName())
                 .tweets(tweets)

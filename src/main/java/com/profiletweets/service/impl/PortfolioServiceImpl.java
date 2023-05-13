@@ -10,7 +10,12 @@ import com.profiletweets.service.TwitterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -29,6 +34,32 @@ public class PortfolioServiceImpl implements PortfolioService {
     public ResponseEntity createPortfolio(Portfolio portfolio) {
         Portfolio portfolioSaved = portfolioRepository.save(portfolio);
         return ResponseEntity.ok().body(callTweetsFromPortfolio(portfolioSaved));
+    }
+
+    @Override
+    public ResponseEntity addImageInPortfolio(long id, MultipartFile imageFile) {
+
+        return portfolioRepository.findById(id)
+                .map(portfolio ->{
+
+                    String folder = "/photos/";
+                    byte[] bytes = new byte[0];
+                    Path path = null;
+                    try {
+                        bytes = imageFile.getBytes();
+                        path = Paths.get(folder + imageFile.getOriginalFilename());
+                        Files.write(path, bytes);
+
+                    } catch (IOException e) {
+                        return ResponseEntity.internalServerError().build();
+                    }
+
+                    portfolio.setImagePath(path.toString());
+                    portfolioRepository.save(portfolio);
+
+                    return ResponseEntity.ok()
+                        .body(callTweetsFromPortfolio(portfolio));
+                }).orElse(ResponseEntity.notFound().build());
     }
 
     @Override

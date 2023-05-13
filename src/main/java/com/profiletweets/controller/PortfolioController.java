@@ -5,6 +5,7 @@ import com.profiletweets.service.PortfolioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping({"/portfolio"})
@@ -16,6 +17,11 @@ public class PortfolioController {
     @PostMapping
     public ResponseEntity create(@RequestBody Portfolio portfolio){
         return portfolioService.createPortfolio(portfolio);
+    }
+
+    @PostMapping(path = { "/{id}" })
+    public ResponseEntity addImage(@PathVariable long id, @RequestParam("imageFile")MultipartFile imageFile){
+        return portfolioService.addImageInPortfolio(id, imageFile);
     }
 
     @GetMapping
