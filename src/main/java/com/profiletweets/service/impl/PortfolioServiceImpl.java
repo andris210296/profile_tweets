@@ -31,13 +31,13 @@ public class PortfolioServiceImpl implements PortfolioService {
     private TwitterService twitterService;
 
     @Override
-    public ResponseEntity createPortfolio(Portfolio portfolio) {
+    public Optional<PortfolioOutput> createPortfolio(Portfolio portfolio) {
         Portfolio portfolioSaved = portfolioRepository.save(portfolio);
-        return ResponseEntity.ok().body(callTweetsFromPortfolio(portfolioSaved));
+        return Optional.of(callTweetsFromPortfolio(portfolioSaved));
     }
 
     @Override
-    public ResponseEntity addImageInPortfolio(long id, MultipartFile imageFile) {
+    public Optional<PortfolioOutput> addImageInPortfolio(long id, MultipartFile imageFile) {
 
         return portfolioRepository.findById(id)
                 .map(portfolio ->{
@@ -51,35 +51,32 @@ public class PortfolioServiceImpl implements PortfolioService {
                         Files.write(path, bytes);
 
                     } catch (IOException e) {
-                        return ResponseEntity.internalServerError().build();
+                        return Optional.of(new PortfolioOutput());
                     }
 
                     portfolio.setImagePath(path.toString());
                     portfolioRepository.save(portfolio);
 
-                    return ResponseEntity.ok()
-                        .body(callTweetsFromPortfolio(portfolio));
-                }).orElse(ResponseEntity.notFound().build());
+                    return Optional.of(callTweetsFromPortfolio(portfolio));
+                }).orElse(Optional.empty());
     }
 
     @Override
-    public ResponseEntity findAllPortfolios() {
-        return ResponseEntity.ok().body(
-                portfolioRepository.findAll().stream()
-                        .map(portfolio -> callTweetsFromPortfolio(portfolio))
-                        .collect(Collectors.toList()));
+    public Optional<List<PortfolioOutput>> findAllPortfolios() {
+        return Optional.of(portfolioRepository.findAll().stream()
+                .map(portfolio -> callTweetsFromPortfolio(portfolio))
+                .collect(Collectors.toList()));
     }
 
     @Override
-    public ResponseEntity findPortfolio(long id) {
+    public Optional<PortfolioOutput> findPortfolio(long id) {
         return portfolioRepository.findById(id)
-                .map(portfolio -> ResponseEntity.ok()
-                        .body(callTweetsFromPortfolio(portfolio)))
-                .orElse(ResponseEntity.notFound().build());
+                .map(portfolio -> Optional.of(callTweetsFromPortfolio(portfolio)))
+                .orElse(Optional.empty());
     }
 
     @Override
-    public ResponseEntity updatePortfolio(long id, Portfolio portfolio) {
+    public Optional<PortfolioOutput> updatePortfolio(long id, Portfolio portfolio) {
         return portfolioRepository.findById(id)
                 .map(record -> {
                     record.setImagePath(portfolio.getImagePath());
@@ -87,17 +84,17 @@ public class PortfolioServiceImpl implements PortfolioService {
                     record.setExperience(portfolio.getExperience());
                     record.setTwitterUserName(portfolio.getTwitterUserName());
                     Portfolio updated = portfolioRepository.save(record);
-                    return ResponseEntity.ok().body(callTweetsFromPortfolio(updated));
-                }).orElse(ResponseEntity.notFound().build());
+                    return Optional.of(callTweetsFromPortfolio(updated));
+                }).orElse(Optional.empty());
     }
 
     @Override
-    public ResponseEntity<?> deletePortfolio(long id) {
+    public Optional<PortfolioOutput> deletePortfolio(long id) {
         return portfolioRepository.findById(id)
                 .map(record -> {
                     portfolioRepository.deleteById(id);
-                    return ResponseEntity.ok().build();
-                }).orElse(ResponseEntity.notFound().build());
+                    return Optional.of(new PortfolioOutput());
+                }).orElse(Optional.empty());
     }
 
     private PortfolioOutput callTweetsFromPortfolio(Portfolio portfolio){
