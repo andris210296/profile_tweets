@@ -80,7 +80,7 @@ Response:
 ```json
 {
   "idPortfolio": 1302,
-  "imagePath": "C:\\Users\\andri\\IdeaProjects\\profile_tweets\\src\\main\\resources\\photos\\car.jpg",
+  "imagePath": "/photos/car.jpg",
   "name": "Jonh Doe",
   "experience": "I have experience working with java",
   "twitterUserName": "MicrosoftBR",
@@ -116,7 +116,7 @@ tweets are going to be retrieved from:
 Request: {server}/portfolio/{idPortfolio} - PUT
 ```json
 {
-  "imagePath": "C:\\Users\\andri\\IdeaProjects\\profile_tweets\\src\\main\\resources\\photos\\car.jpg",
+  "imagePath": "/photos/car.jpg",
   "name": "Jonh Doe",
   "experience": "I have experience working with java",
   "twitterUserName": "Twitter"
@@ -126,7 +126,7 @@ Response:
 ```json
 {
   "idPortfolio": 1302,
-  "imagePath": "C:\\Users\\andri\\IdeaProjects\\profile_tweets\\src\\main\\resources\\photos\\car.jpg",
+  "imagePath": "/photos/car.jpg",
   "name": "Jonh Doe",
   "experience": "I have experience working with java",
   "twitterUserName": "Twitter",
@@ -193,7 +193,7 @@ Response:
   },
   {
     "idPortfolio": 1302,
-    "imagePath": "C:\\Users\\andri\\IdeaProjects\\profile_tweets\\src\\main\\resources\\photos\\car.jpg",
+    "imagePath": "/photos/car.jpg",
     "name": "Jonh Doe",
     "experience": "I have experience working with java",
     "twitterUserName": "Twitter",
@@ -231,7 +231,7 @@ Response:
 ```json
 {
   "idPortfolio": 1302,
-  "imagePath": "C:\\Users\\andri\\IdeaProjects\\profile_tweets\\src\\main\\resources\\photos\\car.jpg",
+  "imagePath": "/photos/car.jpg",
   "name": "Jonh Doe",
   "experience": "I have experience working with java",
   "twitterUserName": "Twitter",
