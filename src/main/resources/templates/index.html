@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <title>Portfolio Page</title>
+
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+    <link type="text/css" rel="stylesheet" href="materialize/css/materialize.min.css"  media="screen,projection"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+</head>
+<body>
+
+<header>
+    <nav class="menu">
+        <div class="nav-wrapper">
+            <a href="/" class="brand-logo">Portfolios List</a>
+            <ul id="nav-mobile" class="right hide-on-med-and-down">
+                <li><a th:href="@{/newPortfolioForm}" class="waves-effect waves-light btn"><i class="material-icons left">add_circle_outline</i>Portfolio Creation</a></li>
+            </ul>
+        </div>
+    </nav>
+
+</header>
+
+
+<div class="section">
+    <div id="portfolio" class="section portfolio scrollspy">
+        <h3 class="center">Portfolios</h3>
+
+        <tr th:each="portfolioOutput : ${portfolioOutputs}">
+
+            <div class="row">
+                <div class="col s12 m4">
+                    <div class="card">
+                        <div class="card-image">
+                            <img th:src="@{${portfolioOutput.imagePath}}" alt="My Picture"></img>
+                        </div>
+                        <div class="card-content">
+                            <span class="card-title" th:text="${portfolioOutput.name}"></span>
+                            <span th:text="${portfolioOutput.experience}"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col s12 m4">
+                    <div class="card">
+                        <div class="collapsible-header active"><i class="material-icons">forum</i>Tweets -><span th:text="${portfolioOutput.twitterUserName}"></span></div>
+
+                        <div th:each="tweet : ${portfolioOutput.tweets}" class="collapsible-body" style="display: block;">
+                            <p><span th:text="${tweet.text}"></span></p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col s12 m4">
+                    <div class="card">
+                        <div class="card-content">
+                            <a  th:href="@{/openUpdatePortfolioForm/{id}(id=${portfolioOutput.idPortfolio})}" class="waves-effect waves-light btn"><i class="material-icons left">autorenew</i>Update</a>
+                            <a  th:href="@{/deletePortfolio/{id}(id=${portfolioOutput.idPortfolio})}" class="waves-effect waves-light btn"><i class="material-icons left">delete</i>Delete</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </tr>
+
+
+    </div>
+</div>
+
+
+
+<script type="text/javascript" src="materialize/js/materialize.min.js"></script>
+
+</body>
+</html>

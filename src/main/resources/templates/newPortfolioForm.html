@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <title>Portfolio Page</title>
+
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+    <link type="text/css" rel="stylesheet" href="materialize/css/materialize.min.css"  media="screen,projection"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+</head>
+<body>
+
+<header>
+    <nav class="menu">
+        <div class="nav-wrapper">
+            <a href="/" class="brand-logo">Portfolios List</a>
+            <ul id="nav-mobile" class="right hide-on-med-and-down">
+                <li><a th:href="@{/newPortfolioForm}" class="waves-effect waves-light btn"><i class="material-icons left">add_circle_outline</i>Portfolio Creation</a></li>
+            </ul>
+        </div>
+    </nav>
+
+</header>
+
+
+
+<div class="container">
+    <div class="section">
+        <div id="about" class="section about scrollspy">
+
+            <h3 class="center">Portfolio Management</h3>
+            <div class="row">
+                <div class="col s12">
+
+                    <form action= "#" th:action="@{/savePortfolio}" th:object="${portfolio}" method="post">
+                        <div class="input field col s3">
+                            Name: <input type="text" th:field = "*{name}" name="name">
+                        </div>
+                        <div class="input field col s3">
+                            Twitter UserName: <input type="text" th:field = "*{twitterUserName}" name="name">
+                        </div>
+                        <div class="input field col s6">
+                            Experience: <input type="text" th:field = "*{experience}" name="name">
+                        </div>
+
+                        <button class="waves-effect waves-light btn" type="submit">Save</button>
+
+                    </form>
+
+                </div>
+                <div class="col s12">
+                    <p>In the update page you can add an Image for your profile</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<script type="text/javascript" src="materialize/js/materialize.min.js"></script>
+
+</body>
+</html>
