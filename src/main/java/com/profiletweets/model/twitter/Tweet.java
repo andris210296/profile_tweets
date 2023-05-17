@@ -18,4 +18,6 @@ public class Tweet implements Serializable {
     private Long idTwitter;
 
     private String text;
+
+    private String imageUrl;
 }

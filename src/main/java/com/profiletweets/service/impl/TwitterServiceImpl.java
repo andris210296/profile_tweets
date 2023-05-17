@@ -37,6 +37,7 @@ public class TwitterServiceImpl implements TwitterService {
             return Tweet.builder()
                     .idTwitter(twitter.getId())
                     .text(twitter.getText())
+                    .imageUrl(twitter.getUser().getProfileImageURL())
                     .build();
 
         }).collect(Collectors.toList()));

@@ -48,6 +48,7 @@
                         <div class="collapsible-header active"><i class="material-icons">forum</i>Tweets -><span th:text="${portfolioOutput.twitterUserName}"></span></div>
 
                         <div th:each="tweet : ${portfolioOutput.tweets}" class="collapsible-body" style="display: block;">
+                            <img th:src="@{${tweet.imageUrl}}" alt="My Picture" height="50px" width="50px"></img>
                             <p><span th:text="${tweet.text}"></span></p>
                         </div>
                     </div>
