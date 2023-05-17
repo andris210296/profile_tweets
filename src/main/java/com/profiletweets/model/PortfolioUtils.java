@@ -18,4 +18,11 @@ public class PortfolioUtils {
                 .tweets(tweets)
                 .build();
     }
+
+    public static String pathCompleteToSmall(String pathString){
+        pathString = pathString.replace("\\","/");
+        String[] pathSplited = pathString.split("/");
+
+        return "/" + pathSplited[pathSplited.length -2] + "/" + pathSplited[pathSplited.length -1];
+    }
 }

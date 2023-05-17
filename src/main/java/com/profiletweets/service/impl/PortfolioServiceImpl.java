@@ -8,7 +8,7 @@ import com.profiletweets.repository.PortfolioRepository;
 import com.profiletweets.service.PortfolioService;
 import com.profiletweets.service.TwitterService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -30,6 +30,9 @@ public class PortfolioServiceImpl implements PortfolioService {
     @Autowired
     private TwitterService twitterService;
 
+    @Value("${dir.images:photos}")
+    private String dirImages;
+
     @Override
     public Optional<PortfolioOutput> createPortfolio(Portfolio portfolio) {
         Portfolio portfolioSaved = portfolioRepository.save(portfolio);
@@ -42,19 +45,21 @@ public class PortfolioServiceImpl implements PortfolioService {
         return portfolioRepository.findById(id)
                 .map(portfolio ->{
 
-                    String folder = "/photos/";
+                    String uploadDirectory = System.getProperty("user.dir") + "\\src\\main\\webapp\\"+ dirImages +"\\";
+
                     byte[] bytes = new byte[0];
                     Path path = null;
                     try {
                         bytes = imageFile.getBytes();
-                        path = Paths.get(folder + imageFile.getOriginalFilename());
+                        path = Paths.get(uploadDirectory + imageFile.getOriginalFilename());
                         Files.write(path, bytes);
 
                     } catch (IOException e) {
+                        System.err.println("In catch IOException: "+e.getClass());
                         return Optional.of(new PortfolioOutput());
                     }
 
-                    portfolio.setImagePath(path.toString());
+                    portfolio.setImagePath(PortfolioUtils.pathCompleteToSmall(path.toString()));
                     portfolioRepository.save(portfolio);
 
                     return Optional.of(callTweetsFromPortfolio(portfolio));
@@ -64,7 +69,9 @@ public class PortfolioServiceImpl implements PortfolioService {
     @Override
     public Optional<List<PortfolioOutput>> findAllPortfolios() {
         return Optional.of(portfolioRepository.findAll().stream()
-                .map(portfolio -> callTweetsFromPortfolio(portfolio))
+                .map(portfolio -> {
+                    return callTweetsFromPortfolio(portfolio);
+                })
                 .collect(Collectors.toList()));
     }
 
@@ -101,4 +108,5 @@ public class PortfolioServiceImpl implements PortfolioService {
         Optional<List<Tweet>> tweetsList = twitterService.getTweetsByUserName(portfolio.getTwitterUserName());
         return PortfolioUtils.portfolioToPortfolioOutput(portfolio, tweetsList.orElse(Arrays.asList(Tweet.builder().build())));
     }
+
 }
