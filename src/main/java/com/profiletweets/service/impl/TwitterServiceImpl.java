@@ -1,22 +1,16 @@
 package com.profiletweets.service.impl;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JavaType;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.jayway.jsonpath.Configuration;
 import com.profiletweets.model.twitter.Tweet;
 import com.profiletweets.service.TwitterService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-
-import java.util.*;
-import java.util.stream.Collectors;
-
 import twitter4j.*;
-import twitter4j.conf.*;
+import twitter4j.conf.ConfigurationBuilder;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class TwitterServiceImpl implements TwitterService {
