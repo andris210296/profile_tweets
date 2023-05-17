@@ -13,7 +13,7 @@ contains that information, but in the future, the given data can expire.
 
 Make sure to create a folder inside **\src\main\webapp** with any name desired. This is very important to make the uploaded images to display in the front-end.
 In the **application.properties** you can define a name for this folder, but make sure to add manually inside **\src\main\webapp**. If you don't define a folder
-the default value would be **photos** without "\" or "/"
+the default value would be **photos** without "\\" or "/"
 
 **Starting the profile_tweets**
 
